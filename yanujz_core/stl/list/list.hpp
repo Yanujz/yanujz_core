@@ -45,7 +45,7 @@ public:
         _tail  = _head;
     }
     ~dl_list(){
-        //clear();
+        clear();
     }
 
     std_err push_front(T data)
@@ -256,6 +256,7 @@ public:
             _tail = _dst;
         }
 
+        return  std_err::ERR_OK;
     }
 
 private:

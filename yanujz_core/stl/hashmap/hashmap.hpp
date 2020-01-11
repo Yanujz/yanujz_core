@@ -33,7 +33,17 @@
 #include "../../utils/crc/crc_utils.h"
 
 namespace yanujz {
-/*
+template <typename T, typename D>
+class hashable
+{
+public:
+    hashable();
+    virtual T getKey() = 0;
+    virtual D getValue() = 0;
+};
+
+
+
 template <typename KEY, typename VALUE, int SIZE>
 class hashmap {
 public:
@@ -48,18 +58,14 @@ public:
 
     void put(KEY key, int size, VALUE val){
         int ret = hash(key, size);
-        printf("put Hash: 0x%02X\n", ret);
-        //VALUE* temp = buf[ret];
-        //if(temp){
-        //    return;
-        //}
+        printf("put key: %s hash: 0x%02X\n", key, ret);
+
         buf[ret].push_back(val);
-        //buf[ret] = val;
     }
 
     VALUE* get(KEY key, int size){
         int ret = hash(key, size);
-        printf("get Hash: 0x%02X %d\n", ret, SIZE);
+        //printf("get Hash: 0x%02X %d\n", ret, SIZE);
         if(ret > SIZE - 1) {
             return nullptr;
         }
@@ -68,7 +74,7 @@ public:
         if( _list_size > 1){
             // Iterate into list
             for (int i = 0; i < _list_size; ++i) {
-                int retval = memcmp(key, buf[ret][i]->name, size);
+                int retval = memcmp(key, buf[ret][i].getKey(), size);
                 if( 0 == retval){
                     return buf[ret][i];
                 }
@@ -83,8 +89,6 @@ private:
         return CRC8((uint8_t*)data, size) & MASK_FROM_VAL(SIZE);
     }
 
-    yanujz::list<VALUE> buf[SIZE];
-    //VALUE buf[SIZE];
+    dl_list<VALUE> buf[SIZE];
 };
-*/
 }

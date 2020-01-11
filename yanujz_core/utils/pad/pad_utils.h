@@ -3,7 +3,7 @@
 
 	Author : Yanujz
 
-	Created in : 01/09/2020
+	Created in : 01/11/2020
 
     Copyright (C) 2020  Yanujz
 
@@ -24,23 +24,17 @@
 		e-mail: yanujz@live.it
 */
 #pragma once
+#include <stdio.h>
+#include <stdint.h>
+#include "../../defines/defines.h"
+#include "../../ytype.h"
 
+#if defined(__STL_SUPPORT__)
+#include <vector>
+#endif
 
-#ifdef __cplusplus
-#include "ytype.h"
+void pad_with(u8t &buff, size_t buf_size, size_t new_size, u8t fill_byte);
 
-// STL
-#include "defines/defines.h"
-#include "stl/fifo/fifo.hpp"
-#include "stl/hashmap/hashmap.hpp"
-#include "stl/list/list.hpp"
-#include "stl/vector/vector.hpp"
-#include "stl/string/string.h"
-
-// Utils
-#include "utils/utils.h"
-
-// Libs
-#include "cli/commands/cli_commands.h"
-#include "cli/tokenizer/cli_tokenizer.h"
+#if defined(__STL_SUPPORT__)
+void pad_with(std::vector<uint8_t> &v, uint8_t fill_byte, size_t new_size);
 #endif

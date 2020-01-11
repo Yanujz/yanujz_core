@@ -1,145 +1,203 @@
 #include <iostream>
 //#include "utils/crc/crc4/crc4.h"
 #include "yanujz_core/yanujz_core.h"
+
 using namespace std;
 
 
-#define MAX_CMD_LEN 16
-typedef int (*cmd_func)(int argc, char** argv);
 
 
-class hashable {
-
-protected:
-    unsigned int uid;
-};
-
-struct cli_cmd : public hashable {
-    cli_cmd(){
-        bzero(name, MAX_CMD_LEN);
-    }
-    cli_cmd(const char* name, cmd_func func)
-    {
-        memcpy(this->name, name, strlen(name));
-        this->execute = func;
-    }
-
-    char name[MAX_CMD_LEN] = {0};
-    cmd_func execute = nullptr;
-};
-
-struct cmd_t {
-    const char name[16];
-    cmd_func func;
-};
+//template <typename T, typename D>
+//struct cli_cmd : public yanujz::hashable<T, D>
+//{
+//    cli_cmd(){
+//        bzero(name, MAX_CMD_LEN);
+//    }
+//    cli_cmd(const char* name, cmd_func func)
+//    {
+//        memcpy(this->name, name, strlen(name));
+//        this->execute = func;
+//    }
+//    const char* getKey(){
+//        return name;
+//    }
+//    cmd_func getValue(){
+//        return execute;
+//    }
+//
+//    char name[MAX_CMD_LEN] = {0};
+//    cmd_func execute = nullptr;
+//};
 
 
 
-int ls(int argc, char** argv)
+
+int ls(int c, char** v)
 {
+    UNUSED(c);
+    UNUSED(v);
     printf("ls called\n");
     return 0;
 }
 
-
-int rm(int c, char** v){
+int rm(int c, char** v)
+{
+    UNUSED(c);
+    UNUSED(v);
     printf("rm called\n");
     return 0;
 }
-int mkdir(int argc, char** argv)
+
+int mkdir(int c, char** v)
 {
+    UNUSED(c);
+    UNUSED(v);
     printf("mkdir called\n");
     return 0;
 }
 
-int pwd(int c, char** v){
+int pwd(int c, char** v)
+{
+    UNUSED(c);
+    UNUSED(v);
     printf("pwd called\n");
     return 0;
 }
 
-int cd(int c, char** v){
+int cd(int c, char** v)
+{
+    UNUSED(c);
+    UNUSED(v);
     printf("cd called\n");
     return 0;
 }
 
+int reboot(int c, char** v)
+{
+    UNUSED(c);
+    UNUSED(v);
+    printf("reboot called\n");
+    return 0;
+}
+
+int ifconfig(int c, char** v)
+{
+    UNUSED(c);
+    UNUSED(v);
+    printf("ifconfig called\n");
+    return 0;
+}
+
+int cat(int c, char** v)
+{
+    UNUSED(c);
+    UNUSED(v);
+    printf("cat called\n");
+    return 0;
+}
+
+int tac(int c, char** v)
+{
+    UNUSED(c);
+    UNUSED(v);
+    printf("tac called\n");
+    return 0;
+}
+
+int nano(int c, char** v)
+{
+    UNUSED(c);
+    UNUSED(v);
+    printf("nano called\n");
+    return 0;
+}
+
+int dump_log(int c, char** v)
+{
+    UNUSED(c);
+    UNUSED(v);
+    printf("dump_log called\n");
+    return 0;
+}
+
 cmd_t cmds[] = {
-    {"ls",               ls},
+    {"ls",          ls},
     {"rm",          rm},
-    {"pwd",             pwd},
+    {"pwd",         pwd},
     {"cd",          cd},
     {"mkdir",       mkdir},
-    {"reboot",      nullptr},
-    {"ifconfig", nullptr},
-    {"cat",  nullptr},
-    {"tac",  nullptr},
-    {"nano", nullptr},
+    {"reboot",      reboot},
+    {"ifconfig",    ifconfig},
+    {"cat",         cat},
+    {"tac",         tac},
+    {"nano",        nano},
     // Machine cmds
-    {"dump_log",    nullptr}
+    {"dump_log",    dump_log}
 };
+
+
+
 
 int main()
 {
+    CmdTable<8> table;
 
-    //yanujz::list<cli_cmd> list;
-    //list.push_back(cli_cmd("ls", ls));
-    //list.push_back(cli_cmd("mkdir", mkdir));
-
-    //printf("cmd name %s\n", list.get(0)->name);
-    //printf("swapping\n");
-    //list.swap(0, 1);
-    //printf("swapped\n");
-    //printf("cmd name %s\n", list.get(0)->name);
-
-    yanujz::dl_list<cli_cmd> temp;
-    // mkdir ls cd pwd rm
-    temp.push_front(cli_cmd("ls", ls));
-    temp.push_front(cli_cmd("mkdir", mkdir));
-    temp.push_back(cli_cmd("pwd", pwd));
-    temp.push_back(cli_cmd("rm", rm));
-    temp.push_back(cli_cmd("cd", cd));
-
-
-    temp.erase(2);
-    yanujz::std_err ret = temp.swap(0, 4);
-    if(yanujz::std_err::ERR_OK != ret) {
-        printf("can't swap\n");
-        exit(1);
+    for (uint i = 0; i < SIZE_OF_ARRAY(cmds); ++i) {
+       cmd_table::err ret = table.add(cmds[i]);
+       if(cmd_table::err::ERR_OK != ret){
+           printf("error %d\n", ret);
+       }
     }
-    cli_cmd* cmd = temp.get(0);
-    if(cmd){
-        cmd->execute(1, nullptr);
+    char str[64];
+    while (1) {
+
+        //gets(str);
+        fgets(str, 64, stdin);
+        printf("input: %s\n", str);
+
+        cli_tokens_t tokens = cli_tokenizer_str2argv(str);
+
+        for (int i = 0; i < tokens.argc; ++i) {
+            printf("argv[%d]: %s\n", i, tokens.argv[i]);
+        }
+
+        cmd_func func = table.get(tokens.argv[0]);
+
+        if(func){
+            func(0, nullptr);
+        }
+        else {
+            printf("cmd not found\n");
+        }
     }
-    else {
-        printf("null returned\n");
-    }
-    //if(list[0].isEmpty()){
-    //    printf("list is empty\n");
-    //}
-    //list[0].push_back(cli_cmd("ls", ls));
-    //list[0].push_back(cli_cmd("mkdir", mkdir));
-    //list[0].push_back(cli_cmd("pippo", pippo));
-    //printf("size %d\n", list[0].size());
-    //cli_cmd asd = list[0][1];
-    //asd.execute(0, nullptr);
-    //list[0].front().execute(0, nullptr);
-    //list[0].back().execute(0, nullptr);
+
+    //((cmd_func)jump_table[coord.y][coord.x])(0, nullptr);
 
 
-    //for (int var = 0; var < total; ++var) {
-    //
-    //}
+    //cli_cmd<const char*, cmd_func> cmd("ls", ls);
+    //yanujz::hashable<const char*, cmd_func>* hashable = &cmd;
+    //((cmd_func)hashable->getValue())(0, nullptr);
 
-    //yanujz::hashmap<const char*, cli_cmd, 64> map;
-    //map.put("ls", strlen("ls"), cli_cmd("ls", ls));
-    //map.put("mkdir", strlen("mkdir"), cli_cmd("mkdir", mkdir));
-    //map.put("mkdir", strlen("mkdir"), cli_cmd("mkdir", mkdir));
-    //map.get("mkdir", strlen("mkdir"))->execute(0, nullptr);
+    //yanujz::hashmap<const char*,
+    //        yanujz::hashable<const char*, cli_cmd>, 32> map;
 
+    // map.put("ls", strlen("ls"), );
+
+    //map.get("reboot", strlen("reboot"))->value.execute(0, nullptr);
+
+    //yanujz::hashmap<const char*, cli_cmd, 32> map;
+    //printf("size %lu\n", SIZE_OF_ARRAY(cmds) );
     //{
-    //    map.put("ls", strlen("ls"), cli_cmd("ls", ls));
-    //    //map.put("ls", strlen("ls"), cli_cmd("ls", mkdir));
+    //    for(uint i = 0; i < SIZE_OF_ARRAY(cmds); ++i)
+    //    {
+    //        map.put(cmds[i].name, strlen(cmds[i].name),
+    //                cli_cmd(cmds[i].name, cmds[i].func));
+    //    }
     //}
+    //map.get("mkdir", strlen("mkdir"))->execute(0, nullptr);
     //map.get("ls", strlen("ls"))->execute(0, nullptr);
+    //map.get("reboot", strlen("reboot"))->execute(0, nullptr);
+    //cli_cmd* asd = map.get("reboot", strlen("reboot"));
 
 
     return 0;

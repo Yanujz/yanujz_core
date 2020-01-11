@@ -5,13 +5,23 @@ CONFIG -= qt
 
 SOURCES += \
         main.cpp \
+        yanujz_core/cli/commands/cli_commands.cpp \
+        yanujz_core/cli/tokenizer/cli_tokenizer.cpp \
         yanujz_core/stl/string/string.cpp \
         yanujz_core/utils/crc/crc16/crc16.cpp \
         yanujz_core/utils/crc/crc32/crc32.cpp \
         yanujz_core/utils/crc/crc8/crc8.cpp \
-        yanujz_core/utils/crc/crc_utils.cpp
+        yanujz_core/utils/crc/crc_utils.cpp \
+        yanujz_core/utils/math/math_utils.cpp \
+        yanujz_core/utils/pad/pad_utils.cpp \
+        yanujz_core/utils/str/str_utils.cpp \
+        yanujz_core/utils/swap/swap_utils.cpp \
+        yanujz_core/utils/ungrouped/ungrouped.cpp
 
 HEADERS += \
+    yanujz_core/cli/commands/cli_commands.h \
+    yanujz_core/cli/tokenizer/cli_tokenizer.h \
+    yanujz_core/defines/ascii/ascii.h \
     yanujz_core/defines/bit_manipulation.h \
     yanujz_core/defines/cast.h \
     yanujz_core/defines/defines.h \
@@ -32,6 +42,11 @@ HEADERS += \
     yanujz_core/utils/crc/crc8/crc8.h \
     yanujz_core/utils/crc/crc_utils.h \
     yanujz_core/utils/crypto/crypto_utils.h \
+    yanujz_core/utils/math/math_utils.h \
+    yanujz_core/utils/pad/pad_utils.h \
+    yanujz_core/utils/str/str_utils.h \
+    yanujz_core/utils/swap/swap_utils.h \
+    yanujz_core/utils/ungrouped/ungrouped.h \
     yanujz_core/utils/utils.h \
     yanujz_core/vector/vector.hpp \
     yanujz_core/yanujz_core.h \

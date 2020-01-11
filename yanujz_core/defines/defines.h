@@ -29,7 +29,7 @@
 #include "prepoc_math.h"
 
 
-#define SIZE_OF_ARRAY(x) sizeof(x)/sizeof(x[0])
+#define SIZE_OF_ARRAY(x) ((sizeof(x)/sizeof(x[0])) & 0xFFFFFFFF)
 #define ELEMENT_IN_ARRAY(x)  (*(&x + 1) - x)
 
 #define ABS(N) ((N<0)?(-N):(N))
@@ -45,21 +45,25 @@ constexpr unsigned int toABS(int x){
 #define LO16(x) (x & 0xFFFF)
 #define HI16(x) ((x >> 16) & 0xFFFF)
 
+#define LO32(x) (x & 0xFFFFFFFF)
+#define HI32(x) ((x >> 32) & 0xFFFFFFFF)
 
-
-#ifndef YWEAK
-#define YWEAK __attribute__((weak))
+#ifndef WEAK
+#define WEAK __attribute__((weak))
 #endif
 
-#ifndef YPACKED
-#define YPACKED __attribute__((packed))
+#ifndef PACKED
+#define PACKED __attribute__((packed))
 #endif
 
-#ifndef YSECTION
-#define YSECTION(x) __attribute__ ((section (x)))
+#ifndef SECTION
+#define SECTION(x) __attribute__ ((section (x)))
 #endif
 
-
-#define VALUE_FROM_MAP(var, mask) (var & mask)
+#ifndef UNUSED
+#define UNUSED(x) (void)(x)
+#endif
 
 #define IS_IN_RANGE(x, y, z)(x >= y && x <= z)
+
+#define AND_VALUE(var, mask) (var & mask)

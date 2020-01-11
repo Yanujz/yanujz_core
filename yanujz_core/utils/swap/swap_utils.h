@@ -3,7 +3,7 @@
 
 	Author : Yanujz
 
-	Created in : 01/09/2020
+	Created in : 01/11/2020
 
     Copyright (C) 2020  Yanujz
 
@@ -24,23 +24,29 @@
 		e-mail: yanujz@live.it
 */
 #pragma once
+#include <stdio.h>
+#include <stdint.h>
+#include "../../defines/defines.h"
+#include "../../ytype.h"
+
+#if defined(__STL_SUPPORT__)
+#include <vector>
+#endif
 
 
-#ifdef __cplusplus
-#include "ytype.h"
+enum SWAP_SIZE{
+    //NIBBLE,
+    WORD = 2,
+    DWORD = 4,
+    QWORD = 8
+};
 
-// STL
-#include "defines/defines.h"
-#include "stl/fifo/fifo.hpp"
-#include "stl/hashmap/hashmap.hpp"
-#include "stl/list/list.hpp"
-#include "stl/vector/vector.hpp"
-#include "stl/string/string.h"
+void swap_bytes(u8t *v, size_t src, size_t dst);
+void swap_endian(u8t *v, size_t size, size_t wordlen);
+void swap_nibbles(u8t* v, size_t size);
 
-// Utils
-#include "utils/utils.h"
-
-// Libs
-#include "cli/commands/cli_commands.h"
-#include "cli/tokenizer/cli_tokenizer.h"
+#if defined(__STL_SUPPORT__)
+void swap_bytes(std::vector<uint8_t> &v, size_t src, size_t dst);
+void swap_endian(std::vector<uint8_t> &v, size_t wordlen);
+void swap_nibbles(std::vector<uint8_t> &v);
 #endif

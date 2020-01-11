@@ -3,7 +3,7 @@
 
 	Author : Yanujz
 
-	Created in : 01/09/2020
+	Created in : 01/11/2020
 
     Copyright (C) 2020  Yanujz
 
@@ -24,23 +24,29 @@
 		e-mail: yanujz@live.it
 */
 #pragma once
+#include <stdio.h>
+#include <stdint.h>
+
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+
+// for debugging
+//#define STATUS(format, args...)
+//   printf("here: %d. ", __LINE__); printf(format, ## args); printf("\n"); fflush(stdout);
 
 
-#ifdef __cplusplus
-#include "ytype.h"
+/* currently building the argc/argv stuff in a global context */
+#define ARGV_MAX  255
+#define ARGV_TOKEN_MAX  255
 
-// STL
-#include "defines/defines.h"
-#include "stl/fifo/fifo.hpp"
-#include "stl/hashmap/hashmap.hpp"
-#include "stl/list/list.hpp"
-#include "stl/vector/vector.hpp"
-#include "stl/string/string.h"
+struct cli_tokens_t {
+ int argc;
+ char **argv;
+};
 
-// Utils
-#include "utils/utils.h"
+/* main parser */
+cli_tokens_t cli_tokenizer_str2argv(char *s);
+void cli_tokenizer_free(cli_tokens_t* args);
 
-// Libs
-#include "cli/commands/cli_commands.h"
-#include "cli/tokenizer/cli_tokenizer.h"
-#endif
