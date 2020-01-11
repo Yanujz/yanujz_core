@@ -37,31 +37,47 @@ class string
 public:
     string();
     string(const char* str);
-    const char* c_str();
-    int size();
+	~string();
+
+	const char* c_str() const;
+	unsigned int size() const;
+
+	const char &front() const;
+	char &back() const;
 
     void concat(string &str);
     void concat(const char* str);
 
-    int find_first_of(const char* subStr);
+	int find_firsOf(const char* str);
+
+	bool empty();
+
+	void clear();
+
+	void erase(unsigned int n);
 
     //operators
-    bool operator=(string &rhs);
-    bool operator=(const char* rhs);
+	bool operator=(string const &rhs);
+	bool operator=(const char* rhs);
 
     bool operator+(string &rhs);
     bool operator+(const char* rhs);
 
     bool operator==(string &rhs);
-    bool operator==(const char* rhs);
+	bool operator==(const char* str);
+
+	bool operator+=(string str);
+	bool operator+=(const char* str);
+
+	char &operator[](int index) const;
 
 private:
-    char* _buf;
+	char* _buf = nullptr;
     int _str_size;
     int _malloc_size;
 
 };
 
 
-}
+} //namespace yanujz
 
