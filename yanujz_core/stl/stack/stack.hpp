@@ -1,9 +1,9 @@
-/*
+﻿/*
 	
 
 	Author : Yanujz
 
-	Created in : 01/09/2020
+	Created in : 01/12/2020
 
     Copyright (C) 2020  Yanujz
 
@@ -24,23 +24,45 @@
 		e-mail: yanujz@live.it
 */
 #pragma once
+#include <stdio.h>
+#include "../list/list.h"
+#include "../err/err.h"
 
+namespace yanujz {
 
-#ifdef __cplusplus
-#include "ytype.h"
+template <typename T, unsigned int MAX_SIZE>
+class stack
+{
+public:
+    stack() {}
+    std_err push(T data)
+    {
+        if(MAX_SIZE == _size) return std_err::ERR_MAX_SIZE;
 
-// STL
-#include "defines/defines.h"
-#include "stl/fifo/fifo.hpp"
-#include "stl/hashmap/hashmap.hpp"
-#include "stl/list/list.h"
-#include "stl/vector/vector.hpp"
-#include "stl/string/string.h"
-#include "stl/stack/stack.hpp"
-// Utils
-#include "utils/utils.h"
+        std_err ret = _list.push_front(data);
+        ++_size;
+        return ret;
+    }
 
-// Libs
-#include "cli/commands/cli_commands.h"
-#include "cli/tokenizer/cli_tokenizer.h"
-#endif
+    T pop()
+    {
+        T temp;
+        if(0 == _size) return temp;
+
+         temp = *_list.front();
+        _list.pop_front();
+        --_size;
+        return temp;
+    }
+
+    unsigned int size()
+    {
+        return _size;
+    }
+
+private:
+    unsigned int _size = 0;
+    sl_list<T> _list;
+};
+
+}

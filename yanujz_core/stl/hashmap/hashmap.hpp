@@ -29,7 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../../defines/defines.h"
-#include "../list/list.hpp"
+#include "../list/list.h"
 #include "../../utils/crc/crc_utils.h"
 
 namespace yanujz {

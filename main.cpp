@@ -1,7 +1,7 @@
 #include <iostream>
 //#include "utils/crc/crc4/crc4.h"
 #include "yanujz_core/yanujz_core.h"
-
+#include <time.h>
 using namespace std;
 
 
@@ -140,13 +140,23 @@ cmd_t cmds[] = {
 
 int main()
 {
+    yanujz::stack<const char*, 16> stack;
+    stack.push("ciao");
+    stack.push("pippo");
+
+    printf("popped: %s\n", stack.pop());
+    printf("popped: %s\n", stack.pop());
+
+    printf("end\n");
+    return 0;
+
     CmdTable<8> table;
 
     for (uint i = 0; i < SIZE_OF_ARRAY(cmds); ++i) {
-       cmd_table::err ret = table.add(cmds[i]);
-       if(cmd_table::err::ERR_OK != ret){
-           printf("error %d\n", ret);
-       }
+        cmd_table::err ret = table.add(cmds[i]);
+        if(cmd_table::err::ERR_OK != ret){
+            printf("error %d\n", ret);
+        }
     }
     char str[64];
     while (1) {
@@ -161,7 +171,14 @@ int main()
             printf("argv[%d]: %s\n", i, tokens.argv[i]);
         }
 
+        clock_t t;
+        t = clock();
         cmd_func func = table.get(tokens.argv[0]);
+        t = clock() - t;
+        double time_taken = ((double)t)/CLOCKS_PER_SEC; // in seconds
+
+        printf("table.get() took %f seconds to execute \n", time_taken);
+
 
         if(func){
             func(0, nullptr);

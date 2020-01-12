@@ -33,6 +33,9 @@ namespace yanujz {
 enum std_err {
     ERR_OK,
     ERR_NOT_IN_RANGE,
-    ERR_CANT_ALLOC
+    ERR_CANT_ALLOC,
+    ERR_MAX_SIZE,
+    ERR_MIN_SIZE,
+
 };
 }

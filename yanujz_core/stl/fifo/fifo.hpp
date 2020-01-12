@@ -71,10 +71,6 @@ namespace yanujz {
     }
 
     bool isEmpty(){
-        //if(_read_offset == _write_offset){
-        //return true;
-        //}
-        //return false;
         return (_read_offset == _write_offset);
     }
     void setOverwrite(bool value){
@@ -85,7 +81,7 @@ namespace yanujz {
         _write_offset = -1;
     }
     int getUnreadElement(){
-        return toABS(_write_offset - _read_offset);
+        return ABS(_write_offset - _read_offset);
     }
     private:
     bool overwrite;

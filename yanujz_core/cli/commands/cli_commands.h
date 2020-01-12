@@ -27,6 +27,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "../../utils/utils.h"
+#include "../../defines/defines.h"
 #include <assert.h>
 
 typedef int (*cmd_func)(int argc, char** argv);
@@ -54,16 +55,13 @@ enum add_policy
 };
 }
 
+/* @param SIZE test
+*/
 template <int SIZE>
 class CmdTable
 {
-        static_assert(0
-    | (SIZE == 2)
-    | (SIZE == 4)
-    | (SIZE == 8)
-    | (SIZE == 16)
-    | (SIZE == 32)
-    | (SIZE == 64)
+        static_assert(
+    IS_POWER_OF_TWO(SIZE)
     , "You must use a power of two");
 
 public:
@@ -83,7 +81,7 @@ public:
 
         if((cmd_table::add_policy::SKIP == _policy) && (false == isEmpty)) return cmd_table::err::ERR_NOT_EMPTY;
 
-        jump_table[coord.y][coord.x] = (void*)cmd.func;
+        jump_table[coord.y][coord.x] = cmd.func;
         return cmd_table::err::ERR_OK;
     }
 
@@ -97,7 +95,7 @@ public:
         _policy = policy;
     }
 private:
-    void* jump_table[SIZE][SIZE] = {{nullptr}};
+    cmd_func jump_table[SIZE][SIZE] = {{nullptr}};
     cmd_table::add_policy _policy = cmd_table::add_policy::SKIP;
 
     struct coordinates {
@@ -109,7 +107,9 @@ private:
     {
         coordinates temp;
         int size    = strlen(str);
-        temp.y      = CRC8((uint8_t*)str, size / 2) & (SIZE - 1);
+        temp.y      = CRC8((uint8_t*)str,
+                           size / 2) & (SIZE - 1);
+
         temp.x      = CRC8((uint8_t*)str + (size / 2),
                             size - (size / 2)) & (SIZE - 1);
 

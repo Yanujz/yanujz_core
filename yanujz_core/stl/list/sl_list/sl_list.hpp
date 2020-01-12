@@ -1,9 +1,9 @@
 /*
+	
 
+	Author : Yanujz
 
-        Author : Yanujz
-
-        Created in : 01/09/2020
+	Created in : 01/12/2020
 
     Copyright (C) 2020  Yanujz
 
@@ -20,40 +20,45 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-        You may contact the author by:
-                e-mail: yanujz@live.it
+	You may contact the author by:
+		e-mail: yanujz@live.it
 */
 #pragma once
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "../err/err.h"
+#include "../../err/err.h"
+
 
 
 namespace yanujz {
+
 template<class T>
-class dl_list {
+class sl_list
+{
 private:
     struct Node
     {
-        Node *prev;
         T data;
         Node *next;
     };
+
 public:
-    dl_list(){
+
+    sl_list()
+    {
         _tail  = _head;
     }
-    ~dl_list(){
+    ~sl_list()
+    {
         clear();
     }
 
     std_err push_front(T data)
     {
-        Node* new_node = new Node;
+        Node* new_node = new Node();
         if(nullptr == new_node) return std_err::ERR_CANT_ALLOC;
 
-        new_node->prev = nullptr;
         new_node->data = data;
         new_node->next = nullptr;
 
@@ -65,35 +70,33 @@ public:
             return std_err::ERR_OK;
         }
 
-        _head->prev = new_node;
         new_node->next = _head;
         _head = new_node;
+
 
         ++_size;
         return std_err::ERR_OK;
     }
+
     std_err pop_front(){
-        Node* temp = _head->next;
+        Node* temp  = _head->next;
         free(_head);
         _head = temp;
         --_size;
-        return  std_err::ERR_OK;
+        return std_err::ERR_OK;
     }
-
 
     std_err push_back(T data){
 
-        Node* new_node = new Node;
-        if(nullptr == new_node){
-            return std_err::ERR_CANT_ALLOC;
-        }
+        Node* new_node = new Node();
+        if(nullptr == new_node) return std_err::ERR_CANT_ALLOC;
 
         //Node *last = _head;
         Node *last = _tail;
 
-        new_node->prev = last;
         new_node->data = data;
         new_node->next = nullptr;
+
 
         if (_head == NULL)
         {
@@ -110,32 +113,29 @@ public:
     }
     std_err pop_back(){
         free(_tail);
-        _tail = get_node(_size - 2);
+        _tail = get(_size - 2);
         _tail->next = nullptr;
         --_size;
         return  std_err::ERR_OK;
     }
 
-
-    T* front()
-    {
-        return &_head->data;
+    T* front(){
+        return (nullptr == _head) ? nullptr : &_head->data;
     }
-    T* back()
-    {
-        return &_tail->data;
+    T* back(){
+        return (nullptr == _tail) ? nullptr : &_tail->data;
     }
 
-
-    T* get(unsigned int n)
-    {
-        Node* node = get_node(n);
-        if(node) return &node->data;
-
-        return nullptr;
+    T* get(int n){
+        if(n > _size - 1) return nullptr;
+        Node* temp = _head;
+        for (int i = 0; i < n; ++i) {
+            temp = _head->next;
+        }
+        return &temp->data;
     }
 
-    T* operator[](unsigned int n){
+    T* operator[](int n){
         return get(n);
     }
 
@@ -143,7 +143,7 @@ public:
         return (0 == _size);
     }
 
-    unsigned int size(){
+    int size(){
         return _size;
     }
 
@@ -156,26 +156,25 @@ public:
         }
     }
 
-    std_err erase(unsigned int n)
-    {
+
+    std_err erase(int n){
         std_err ret = check_range(n);
         if(std_err::ERR_OK != ret) return ret;
 
         if(0 == n) return pop_front();
         if((_size - 1) == n) return pop_back();
 
-        Node* current = get_node(n);
+        Node* prev = get(n - 1);
+        Node* current = get(n);
 
-        current->prev->next = current->next;
-        current->next->prev = current->prev;
-
+        prev->next = current->next;
         free(current);
         --_size;
+
         return std_err::ERR_OK;
     }
 
-    std_err insert(unsigned int n, T data)
-    {
+    std_err insert(int n, T data){
         std_err ret = check_range(n);
         if(std_err::ERR_OK != ret) return ret;
 
@@ -183,85 +182,29 @@ public:
         if((_size - 1) == n) return push_back(data);
 
         Node* new_node = new Node;
-        if(nullptr == new_node) return std_err::ERR_CANT_ALLOC;
-
+        if(nullptr == new_node){
+            return std_err::ERR_CANT_ALLOC;
+        }
 
         new_node->data = data;
+        T prev = get(n);
+        Node* temp = prev.next;
 
-        Node* prev = get_node(n);
-        new_node->next = prev->next;
-        new_node->prev = prev;
-        prev->next->prev = new_node;
-        prev->next = new_node;
+        prev.next = new_node;
 
+        new_node->next = temp;
         ++_size;
         return std_err::ERR_OK;
     }
 
-    std_err swap(unsigned int dst, unsigned int src)
-    {
-        std_err ret = check_range(dst);
-        if(std_err::ERR_OK != ret) return ret;
-        ret = check_range(src);
-        if(std_err::ERR_OK != ret) return ret;
-
-        Node* _dst = get_node(dst);
-        Node* _src = get_node(src);
-
-        Node* _dst_next = _dst->next;
-        Node* _dst_prev = _dst->prev;
-
-        if(_dst->prev)
-        {
-            _dst->prev->next = _src;
-        }
-
-        if(_dst->next)
-        {
-            _dst->next->prev = _src;
-        }
-
-        if(_src->prev)
-        {
-            _src->prev->next = _dst;
-        }
-
-        if(_src->next)
-        {
-            _src->next->prev = _dst;
-        }
-
-        _src->prev = _dst_prev;
-        _src->next = _dst_next;
 
 
-        // Check for update _head and _tail
-        if(0 == dst)
-        {
-            _head = _src;
-        }
 
-        if(_size - 1 == dst)
-        {
-            _tail = _src;
-        }
 
-        if(0 == src)
-        {
-            _head = _dst;
-        }
 
-        if(_size - 1 == src)
-        {
-            _tail = _dst;
-        }
 
-        return  std_err::ERR_OK;
-    }
 
 private:
-
-
     Node* _head = nullptr;
     Node* _tail;
     unsigned int _size = 0;
@@ -272,32 +215,8 @@ private:
         }
         return std_err::ERR_OK;
     }
-
-    Node* get_node(unsigned int n){
-        Node* temp = nullptr;
-        std_err ret = check_range(n);
-        if(std_err::ERR_OK != ret) return temp;
-
-        // Checking iteration from tail
-        unsigned int it_from_tail = (_size - 1) - n;
-        if(it_from_tail < n){
-            temp = _tail;
-            for (unsigned int i = 0; i < it_from_tail; i++) {
-                temp = temp->prev;
-            }
-            return temp;
-        }
-
-        temp = _head;
-        for (unsigned int i = 0; i < n; i++) {
-            temp = temp->next;
-        }
-        return temp;
-    }
-
 };
 
 
 
 } // namespace yanujz
-

@@ -32,7 +32,11 @@ HEADERS += \
     yanujz_core/stl/err/err.h \
     yanujz_core/stl/fifo/fifo.hpp \
     yanujz_core/stl/hashmap/hashmap.hpp \
+    yanujz_core/stl/list/dl_list/dl_list.hpp \
+    yanujz_core/stl/list/list.h \
     yanujz_core/stl/list/list.hpp \
+    yanujz_core/stl/list/sl_list/sl_list.hpp \
+    yanujz_core/stl/stack/stack.hpp \
     yanujz_core/stl/string/string.h \
     yanujz_core/stl/vector/vector.hpp \
     yanujz_core/string/string.h \
