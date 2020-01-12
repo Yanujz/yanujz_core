@@ -60,14 +60,14 @@ public:
 	bool operator=(string const &rhs);
 	bool operator=(const char* rhs);
 
-    bool operator+(string &rhs);
-    bool operator+(const char* rhs);
+    string operator+(string &rhs);
+    string operator+(const char* rhs);
 
     bool operator==(string &rhs);
 	bool operator==(const char* str);
 
-	bool operator+=(string str);
-	bool operator+=(const char* str);
+    void operator+=(string str);
+    void operator+=(const char* str);
 
 	char &operator[](int index) const;
 
@@ -75,6 +75,10 @@ private:
 	char* _buf = nullptr;
     int _str_size;
     int _malloc_size;
+
+    bool equal_assign(const char* rhs);
+    bool equal(const char* str);
+    string plus(const char* str);
 
 };
 
