@@ -41,6 +41,6 @@
 #include "utils/utils.h"
 
 // Libs
-#include "cli/commands/cli_commands.h"
+#include "cli/commands/cli_commands.hpp"
 #include "cli/tokenizer/cli_tokenizer.h"
 #endif

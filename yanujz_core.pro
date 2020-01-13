@@ -5,7 +5,6 @@ CONFIG -= qt
 
 SOURCES += \
         main.cpp \
-        yanujz_core/cli/commands/cli_commands.cpp \
         yanujz_core/cli/tokenizer/cli_tokenizer.cpp \
         yanujz_core/stl/string/string.cpp \
         yanujz_core/utils/crc/crc16/crc16.cpp \
@@ -19,7 +18,7 @@ SOURCES += \
         yanujz_core/utils/ungrouped/ungrouped.cpp
 
 HEADERS += \
-    yanujz_core/cli/commands/cli_commands.h \
+    yanujz_core/cli/commands/cli_commands.hpp \
     yanujz_core/cli/tokenizer/cli_tokenizer.h \
     yanujz_core/defines/ascii/ascii.h \
     yanujz_core/defines/bit_manipulation.h \

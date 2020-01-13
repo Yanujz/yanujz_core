@@ -1,5 +1,5 @@
 #include "cli_tokenizer.h"
-
+#include <string.h>
 int    _argc;
 char  *_argv[ARGV_MAX];
 char  *_argv_token;

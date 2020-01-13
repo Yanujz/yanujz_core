@@ -29,24 +29,50 @@
 #include "prepoc_math.h"
 
 
+#ifndef SIZE_OF_ARRAY
 #define SIZE_OF_ARRAY(x) ((sizeof(x)/sizeof(x[0])) & 0xFFFFFFFF)
-#define ELEMENT_IN_ARRAY(x)  (*(&x + 1) - x)
-
-#define ABS(N) ((N<0)?(-N):(N))
-#ifdef __cplusplus
-constexpr unsigned int toABS(int x){
-    return ((x<0)?(-x):(x));
-}
 #endif
 
+#ifndef ELEMENT_IN_ARRAY
+#define ELEMENT_IN_ARRAY(x)  (*(&x + 1) - x)
+#endif
+
+#ifndef ABS
+#define ABS(N) ((N<0)?(-N):(N))
+#endif
+
+#ifdef __cplusplus
+#ifndef __toABS__
+#define __toABS__
+//constexpr unsigned int toABS(int x){
+//    return ((x<0)?(-x):(x));
+//}
+#endif
+#endif
+
+#ifndef LO8
 #define LO8(x) (x & 0xFF)
+#endif
+
+#ifndef HI8
 #define HI8(x) ((x >> 8) & 0xFF)
+#endif
 
+#ifndef LO16
 #define LO16(x) (x & 0xFFFF)
-#define HI16(x) ((x >> 16) & 0xFFFF)
+#endif
 
+#ifndef HI16
+#define HI16(x) ((x >> 16) & 0xFFFF)
+#endif
+
+#ifndef LO32
 #define LO32(x) (x & 0xFFFFFFFF)
+#endif
+
+#ifndef HI32
 #define HI32(x) ((x >> 32) & 0xFFFFFFFF)
+#endif
 
 #ifndef WEAK
 #define WEAK __attribute__((weak))
@@ -64,6 +90,10 @@ constexpr unsigned int toABS(int x){
 #define UNUSED(x) (void)(x)
 #endif
 
+#ifndef IS_IN_RANGE
 #define IS_IN_RANGE(x, y, z)(x >= y && x <= z)
+#endif
 
+#ifndef AND_VALUE
 #define AND_VALUE(var, mask) (var & mask)
+#endif

@@ -140,14 +140,14 @@ cmd_t cmds[] = {
 
 int main()
 {
-    yanujz::string str0("ciao");
-    yanujz::string str1("sucone");
-    str0 = "str1 as3ftgrafasd sads asd ";
-    printf("%s\n", (str0 + str1).c_str());
-
-    printf("str0: %s\nstr1: %s\n", str0.c_str(), str1.c_str());
-
-    return 0;
+    //yanujz::string str0("ciao");
+    //yanujz::string str1("sucone");
+    //str0 = "str1 as3ftgrafasd sads asd ";
+    //printf("%s\n", (str0 + str1).c_str());
+    //
+    //printf("str0: %s\nstr1: %s\n", str0.c_str(), str1.c_str());
+    //
+    //return 0;
 
     CmdTable<8> table;
 

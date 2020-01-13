@@ -25,9 +25,22 @@
 */
 #pragma once
 
-
+#ifndef is_bit_on
 #define is_bit_on(var, bit) ((var)&(1<<(bit)))
+#endif
+
+#ifndef bitRead
 #define bitRead(value, bit) (((value >> bit) & 0x01))
+#endif
+
+#ifndef bitSet
 #define bitSet(value, bit) ((value |= (1 << bit)))
+#endif
+
+#ifndef bitClear
 #define bitClear(value, bit) ((value) &= ~(1 << bit) )
+#endif
+
+#ifndef bitWrite
 #define bitWrite(value, bit, bitvalue) (bitvalue ? bitSet(value, bit) : bitClear(value, bit))
+#endif
